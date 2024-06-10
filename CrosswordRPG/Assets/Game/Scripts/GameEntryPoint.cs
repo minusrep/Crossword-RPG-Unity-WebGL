@@ -1,49 +1,23 @@
-﻿using System.Collections;
-using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameEntryPoint : MonoBehaviour
 {
-    private Joystick _joystick;
-    private Grid _grid;
+    private GameLooping _loop;
 
     [SerializeField] private Transform _joystickContent;
     [SerializeField] private Transform _gridContent;
+    [SerializeField] private HUD _hud;
 
     private void Start()
     {
-        _joystick = new Joystick(_joystickContent);
-        _grid = new Grid(_gridContent);
-
-        _joystick.OnInputEvent += _grid.OpenWord;
-        _grid.OnWordOpenEvent += OnWordOpen;
-        StartCoroutine(GameRoutine());
+        var joystick = new Joystick(_joystickContent);
+        var grid = new Grid(_gridContent);
+        joystick.OnInputEvent += grid.OpenWord;
+        _loop = new GameLooping(joystick, grid, _hud);
     }
 
     private void Update()
     {
-        _joystick.Update();
+        _loop.Update();
     }
-
-
-    private IEnumerator GameRoutine()
-    {
-        var level = Resources.Load<Level>("Levels/Level_0");
-        BeginLevel(level);
-        yield return new WaitUntil(() => _grid.Complete);
-        level = Resources.Load<Level>("Levels/Level_1");
-        BeginLevel(level);
-    }
-
-    private void BeginLevel(Level level)
-    {
-        _grid.LoadLevel(level);
-        _joystick.Initialize(level.Letters.ToArray());
-    }
-
-    private void OnWordOpen(int value)
-    {
-        _joystick.ClearSelected();
-    }
-
 }

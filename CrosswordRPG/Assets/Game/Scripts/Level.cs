@@ -11,6 +11,18 @@ public class Level : ScriptableObject
             return result;
         }
     }
+    
+    public int Count
+    {
+        get
+        {
+            var count = 0;
+            foreach (var element in Value)
+                if (element != '#') count++;
+            return count;
+        }
+    }
+
     public Vector2Int Size => _size;
     public IReadOnlyList<string> Words => _words;
     public IReadOnlyList<char> Letters => _letters;

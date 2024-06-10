@@ -4,12 +4,11 @@ public class Game : MonoBehaviour
 {
     public static Game Instance { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         Instance = this;
 
     }
-
 
     private void OnDrawGizmos()
     {

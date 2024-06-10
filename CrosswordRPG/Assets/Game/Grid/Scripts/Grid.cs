@@ -6,7 +6,6 @@ using UnityEngine;
 public class Grid
 {
     public event Action<int> OnWordOpenEvent;
-
     public bool Complete
     {
         get
@@ -15,6 +14,16 @@ public class Grid
             foreach (var word in _words)
                 if (!word.IsOpen) result = false;
             return result;
+        }
+    }
+    public int OpenCount
+    {
+        get
+        {
+            var count = 0;
+            foreach(var tile in _tiles)
+                if (tile.State == TileState.Open) count++;
+            return count;
         }
     }
 
@@ -60,8 +69,8 @@ public class Grid
             for (int x = 0; x < size.x; x++)
             {
                 var position = Vector3.zero;
-                position.x = (x - size.x / 2f + 0.5f) * tileSize;
-                position.y = (y * -1f + size.y / 2f - 0.5f) * tileSize;
+                position.x = (x - size.x / 2f + 0.5f) * tileSize + _parent.transform.position.x;
+                position.y = (y * -1f + size.y / 2f - 0.5f) * tileSize + _parent.transform.position.y;
                 position.z = 0f;
 
                 var gameObject = Game.Instantiate(_prefab, position, Quaternion.identity, _parent);
