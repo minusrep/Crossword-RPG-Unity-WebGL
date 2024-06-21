@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Grid
+public class Grid : IOpenable
 {
     public event Action<int> OnWordOpenEvent;
     public bool Complete
@@ -47,7 +47,14 @@ public class Grid
     public void LoadLevel(Level level)
     {
         Clear();
-        InstantiateTiles(level, 0.67f);
+        InstantiateTiles(level, 0.62f);
+    }
+
+    public void OpenTile()
+    {
+        if (Complete) return;
+        _words.First(word => !word.IsOpen).OpenSingle();
+        OnWordOpenEvent?.Invoke(1);
     }
 
     public void OpenWord(string value)
@@ -58,6 +65,11 @@ public class Grid
                 word.Open();
                 OnWordOpenEvent?.Invoke(word.Count);
             }
+    }
+
+    public void Update()
+    {
+        _tiles.ForEach(x => x.State = x.State);
     }
 
     private void InstantiateTiles(Level level, float tileSize = 1f)

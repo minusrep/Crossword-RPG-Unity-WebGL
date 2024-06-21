@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d199a701d6f86e541a2b009eb4bf6ee4, type: 3}
   m_Name: Level_1
   m_EditorClassIdentifier: 
-  _value: "#\u0421\u041F\u041E\u0420\u0422\n##\u041E#\u041E#\n\u0421\u041E\u0420#\u0422#\n\u041E#\u0422###\n\u0420#####\n\u0422#####"
-  _size: {x: 6, y: 6}
+  _value: "#\u041B####\n#\u0410#\u0417\u0410\u041B\n#\u0417\u041B\u041E##\n###\u041B##\n\u041B\u041E\u0417\u0410##"
+  _size: {x: 6, y: 5}
   _words:
-  - "\u0421\u041F\u041E\u0420\u0422"
-  - "\u041F\u041E\u0420\u0422"
-  - "\u0421\u041E\u0420\u0422"
-  - "\u0421\u041E\u0420"
-  - "\u0420\u041E\u0422"
-  _letters: 21041f041e0420042204
+  - "\u041B\u0410\u0417"
+  - "\u0417\u041B\u041E"
+  - "\u0417\u0410\u041B"
+  - "\u0417\u041E\u041B\u0410"
+  - "\u041B\u041E\u0417\u0410"
+  _letters: 1b041e0417041004

@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - JoystickButton
+  - JoystickRandomize
   layers:
   - Default
   - TransparentFX

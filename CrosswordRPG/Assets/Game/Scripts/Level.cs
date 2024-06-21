@@ -23,12 +23,23 @@ public class Level : ScriptableObject
         }
     }
 
-    public Vector2Int Size => _size;
+    public Vector2Int Size
+    {
+        get
+        {
+            var size = new Vector2Int(0, 1);
+            foreach(var element in _value)
+                if (element == '\n') size.y++;
+            foreach (var element in _value)
+                if (element == '\n') break;
+                    else size.x++;
+            return size;
+        }
+    }
     public IReadOnlyList<string> Words => _words;
     public IReadOnlyList<char> Letters => _letters;
 
     [SerializeField][TextArea] private string _value;
-    [SerializeField] private Vector2Int _size;
     [SerializeField] private List<string> _words;
     [SerializeField] private List<char> _letters;
 }

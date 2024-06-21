@@ -1,25 +1,29 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 
 public class GameLooping
 {
+    public event Action OnCompleteEvent;
+    public event Action<int, int, bool> OnEnemyDisplayEvent;
+
     private Joystick _joystick;
     private Grid _grid;
-    private HUD _hud;
     private Level _currentLevel;
-    private Player _player;
 
-    public GameLooping(Joystick joystick, Grid grid, HUD hud)
+    public GameLooping(Joystick joystick, Grid grid)
     {
         _joystick = joystick;
         _grid = grid;
-        _hud = hud;
         _grid.OnWordOpenEvent += OnWordOpen;
-        _player = new Player { Health = 10, MaxHealth = 10 };
+        Game.Instance.Advertisement.OnRewardedEvent += _grid.OpenTile;
+    }
 
-        Game.Instance.StartCoroutine(GameRoutine());
-        Game.Instance.StartCoroutine(DamageRoutine());
+    public void OnEnable()
+    {
+        _grid.Update();
+        Debug.Log("UPDATED");
     }
 
     public void Update()
@@ -27,21 +31,18 @@ public class GameLooping
         _joystick.Update();
     }
 
-    private IEnumerator GameRoutine()
+    public void Begin()
     {
-        _currentLevel = Resources.Load<Level>("Levels/Level_0");
-        BeginLevel(_currentLevel);
-        yield return new WaitUntil(() => _grid.Complete);
-        _currentLevel = Resources.Load<Level>("Levels/Level_1");
-        BeginLevel(_currentLevel);
+        Game.Instance.StartCoroutine(GameRoutine());
     }
 
-    private IEnumerator DamageRoutine()
+    private IEnumerator GameRoutine()
     {
-        yield return new WaitForSeconds(Random.Range(5, 10f));
-        _player.Health -= Random.Range(1, 4);
-        _hud.DisplayPlayer(_player.Health, _player.MaxHealth);
-        if (_player.Health > 0) Game.Instance.StartCoroutine(DamageRoutine());
+        _currentLevel = Resources.Load<Level>($"Levels/Level_{Game.Instance.Level}");
+        BeginLevel(_currentLevel);
+        yield return new WaitUntil(() => _grid.Complete);
+        OnCompleteEvent?.Invoke();
+        Game.Instance.Complete();
     }
 
 
@@ -49,13 +50,13 @@ public class GameLooping
     {
         _grid.LoadLevel(level);
         _joystick.Initialize(level.Letters.ToArray());
-        _hud.DisplayEnemy(_currentLevel.Count, _currentLevel.Count, false);
-        _hud.DisplayPlayer(_player.Health, _player.MaxHealth, false);
+        OnEnemyDisplayEvent?.Invoke(_currentLevel.Count - _grid.OpenCount, _currentLevel.Count, false);
     }
 
     private void OnWordOpen(int value)
     {
         _joystick.ClearSelected();
-        _hud.DisplayEnemy(_currentLevel.Count - _grid.OpenCount, _currentLevel.Count);
+        Game.Instance.Audio.InvokeWin();
+        OnEnemyDisplayEvent?.Invoke(_currentLevel.Count - _grid.OpenCount, _currentLevel.Count, true);
     }
 }

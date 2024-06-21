@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class Tile 
 {
@@ -20,14 +21,14 @@ public class Tile
             _state = value;
             switch (_state)
             {
-                case TileState.Open:
-                    _animator.SetTrigger("Open");
+                case TileState.Empty:
+                    _animator.SetTrigger("Empty"); 
                     break;
                 case TileState.Close:
                     _animator.SetTrigger("Close");
                     break;
-                case TileState.Empty:
-                    _animator.SetTrigger("Empty");
+                case TileState.Open:
+                    _animator.SetTrigger("Open");
                     break;
             }
         }
@@ -49,7 +50,7 @@ public class Tile
         Value = value;
         State = state;
     }
-   
+    
 
     public void Destroy()
     {

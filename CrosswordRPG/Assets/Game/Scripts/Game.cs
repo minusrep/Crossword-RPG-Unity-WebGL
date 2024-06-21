@@ -1,21 +1,36 @@
 ﻿using UnityEngine;
+using Yandex;
 
 public class Game : MonoBehaviour
 {
     public static Game Instance { get; private set; }
 
-    private void Awake()
+    public int Level => _yandexSDK.Data.Level > _levelCount  ? Random.Range(1, _levelCount + 1) : _yandexSDK.Data.Level;
+    public int Count => _yandexSDK.Data.Level;
+    public Audio Audio { get; private set; }
+    public IAdvertisement Advertisement => _yandexSDK;
+    private YandexSDK _yandexSDK;
+    private int _levelCount;
+
+    public void Initialize(YandexSDK yandexSDK)
     {
+        if (Instance != null) 
+        {
+            Destroy(gameObject);
+            return;
+        }  
+
         Instance = this;
+        DontDestroyOnLoad(gameObject);
 
+        _levelCount = Resources.LoadAll("Levels").Length;
+        Audio = new Audio();
+        _yandexSDK = yandexSDK;
     }
-
-    private void OnDrawGizmos()
+    public void Complete()
     {
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Gizmos.DrawRay(mousePosition, Vector2.zero);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawCube(mousePosition, Vector2.one);
+        _yandexSDK.Data.Level++;
+        _yandexSDK.SaveData();
+        _yandexSDK.UpdateLeaderboard(_yandexSDK.Data.Level);
     }
-
 }

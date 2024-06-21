@@ -1,17 +1,21 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
-public class HUD : MonoBehaviour
+public class HUD : Popup
 {
     [SerializeField] private Profile _enemy;
-    [SerializeField] private Profile _player;
-    [SerializeField] private CameraShake _cameraShake;
+    [SerializeField] private Button _settings;
+    [SerializeField] private Button _hint;
 
-    public void DisplayPlayer(int health, int maxHealth, bool fx = true)
-    {
-        _player.DisplayDamage(health, maxHealth, fx);
-        if (fx) _cameraShake.Invoke(0.2f, 0.2f);
-    }
 
     public void DisplayEnemy(int health, int maxHealth, bool fx = true) =>
         _enemy.DisplayDamage(health, maxHealth, fx);
+
+    public override void Initialize(IPopupController controller)
+    {
+        base.Initialize(controller);
+        _settings.onClick.AddListener(controller.OpenPopup<GameSettingsPopup>);
+        _hint.onClick.AddListener(Game.Instance.Advertisement.ShowRewardedAdv);
+
+    }
 }

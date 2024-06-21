@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Word 
@@ -38,5 +39,10 @@ public class Word
         else 
             foreach(var tile in _tiles)
                 if(tile.State != TileState.Open) tile.State = TileState.Open;
+    }
+
+    public void OpenSingle()
+    {
+        _tiles.First(tile => tile.State == TileState.Close).State = TileState.Open;
     }
 }

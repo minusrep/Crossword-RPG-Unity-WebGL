@@ -67,14 +67,14 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u0419"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cce234d07f004ec4a8da850f1f4bc507, type: 2}
-  m_sharedMaterial: {fileID: -3331985550487642025, guid: cce234d07f004ec4a8da850f1f4bc507, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 761a7ad5f362afe46a05723a967eee01, type: 2}
+  m_sharedMaterial: {fileID: -8913697054627012080, guid: 761a7ad5f362afe46a05723a967eee01, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3

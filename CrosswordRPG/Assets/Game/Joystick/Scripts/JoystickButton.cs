@@ -21,6 +21,7 @@ public class JoystickButton
         {
             _value = value;
             _valueInfo.text = _value.ToString();
+            _animator.SetTrigger("Highlight");
         }
     }
 

@@ -12,6 +12,7 @@ public class Joystick
     private List<JoystickButton> _buttons;
     private List<JoystickButton> _selectedButtons;
     private bool _isDragging;
+    private char[] _letters;
 
 
     public Joystick(Transform parent)
@@ -34,6 +35,13 @@ public class Joystick
         var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePosition.z = 0f;
 
+        if (Input.GetMouseButtonDown(0)) 
+        {
+            RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
+            if (hit.collider != null && hit.collider.gameObject.CompareTag("JoystickRandomize"))
+                Randomize();
+        }
+
         if (Input.GetMouseButton(0))
         {
             RaycastHit2D hit = Physics2D.Raycast(mousePosition, Vector2.zero);
@@ -41,9 +49,9 @@ public class Joystick
             {
                 _isDragging = true;
                 var button = FindJoystickButton(hit.collider.gameObject);
-                if (!_selectedButtons.Contains(button)) 
+                if (!_selectedButtons.Contains(button))
                 {
-                    if (_selectedButtons.Count > 0) 
+                    if (_selectedButtons.Count > 0)
                         _selectedButtons?.Last().Connect(button);
                     _selectedButtons.Add(button);
                     button.Selected = true;
@@ -51,8 +59,10 @@ public class Joystick
                     var value = string.Empty;
                     _selectedButtons.ForEach(button => value += button.Value.ToString());
                     OnInputEvent?.Invoke(value);
+                    Game.Instance.Audio.InvokeJoystick();
                 }
             }
+
         }
         else if (Input.GetMouseButtonUp(0))
         {
@@ -74,6 +84,23 @@ public class Joystick
         _isDragging = false;
     }
 
+    public void Randomize()
+    {
+        char[] randomArray = new char[_letters.Length];
+        var letters = (char[]) _letters.Clone();
+
+        var random = new System.Random();
+        for (int i = _letters.Length; i >= 1; i--)
+        {
+            var number = random.Next(1, i + 1) - 1;
+            randomArray[i - 1] = letters[number];
+            letters[number] = letters[i - 1];
+        }
+
+        for (int i = 0; i < randomArray.Length; i++)
+            _buttons[i].Value = randomArray[i];
+    }
+
     private JoystickButton FindJoystickButton(GameObject gameObject)
     {
         foreach(var button in _buttons)
@@ -85,6 +112,7 @@ public class Joystick
 
     private void InstantiateButtons(char[] letters, float radius = 1f)
     {
+        _letters = letters;
         var center = _parent.transform.position;
         var count = letters.Length;
         for(int i = 0; i < count; i++)
@@ -95,6 +123,7 @@ public class Joystick
             var button = new JoystickButton(gameObject, letters[i]);
             _buttons.Add(button);
         }
+        Randomize();
     }
     
     private Vector3 CirclePosition(Vector3 center, float radius, float angle)
