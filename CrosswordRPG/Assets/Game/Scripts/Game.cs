@@ -24,8 +24,8 @@ public class Game : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         _levelCount = Resources.LoadAll("Levels").Length;
-        Audio = new Audio();
         _yandexSDK = yandexSDK;
+        Audio = new Audio();
     }
     public void Complete()
     {

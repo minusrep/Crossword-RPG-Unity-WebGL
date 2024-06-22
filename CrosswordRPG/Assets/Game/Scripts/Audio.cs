@@ -28,6 +28,9 @@ public class Audio
         _joystickIndex = 0;
         _uiSound = Resources.Load<AudioClip>("Audio/UI/UISound");
         _winSound = Resources.Load<AudioClip>("Audio/UI/WinSound");
+
+        Game.Instance.Advertisement.OnAdvShowEvent += OnAdvShow;
+        Game.Instance.Advertisement.OnAdvCloseEvent += OnAdvClose; 
     }
 
     public void InvokeJoystick()
@@ -65,4 +68,13 @@ public class Audio
         return source;
     }
 
+    private void OnAdvShow()
+    {
+        _sounds.gameObject.SetActive(false);
+    }
+
+    private void OnAdvClose()
+    {
+        _sounds.gameObject.SetActive(true);
+    }
 }
